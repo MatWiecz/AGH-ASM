@@ -1,0 +1,23 @@
+minus sto dwanascie razy piecdziesiat dodac szesnascie
+129 131 129 130 100 129 130 002 130 010 129 132 129 130 005 132 010 129 130 129 130 006 130 010 128
+  g   -   g   + 100   g   +   2   +  10   g   *   g   +   5   *  10   g   +   g   +   6   +  10   e
+
+ewaluacja pogrupowanych wyrazen
+  g   -   g   + 100   g   +  12   g   g   g   *   g   +  50   g   g   g   +   g   +  16   g   g   e
+
+ewaluacja wyrazen pomiedzy operatorami
+  g   -   g   + 112   g   g   g   g   g   g   *   g   +  50   g   g   g   +   g   +  16   g   g   e
+
+usuniecie znakow unarnych w wyrazeniach liczbowych
+  g   -   g   g 112   g   g   g   g   g   g   *   g   g  50   g   g   g   +   g   g  16   g   g   e
+
+wykonanie mnozenia
+  g   -   g   g 224   g   g   g   g   g   g   g   g   g   g   g   g   g   +   g   g  16   g   g   e
+
+wykonanie dodawania i odejmowania
+  g-108   g   g   g   g   g   g   g   g   g   g   g   g   g   g   g   g   g   g   g   g   g   g   e
+
+
+
+
+
