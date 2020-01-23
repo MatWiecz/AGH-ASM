@@ -31,19 +31,19 @@ Source code from laboratories of assembler course.
     
     ![1.png](./doc/1.png)
     
-    Right long numbers parsing.
+    <i>Right long numbers parsing.</i>
     
     ![2.png](./doc/2.png)
     
     ![3.png](./doc/3.png)
     
-    Right simple expression parsing.
+    <i>Right simple expression parsing.</i>
     
     ![4.png](./doc/4.png)
     
     ![5.png](./doc/5.png)
     
-    Some errors in expression (not typed correctly or an operation not defined).
+    <i>Some errors in expression (not typed correctly or an operation not defined).</i>
     
     ![6.png](./doc/6.png)
     
@@ -51,5 +51,5 @@ Source code from laboratories of assembler course.
     
     ![8.png](./doc/8.png)
     
-    Some errors in expression (not typed correctly or an operation not defined).
+    <i>Some errors in expression (not typed correctly or an operation not defined).</i>
     
