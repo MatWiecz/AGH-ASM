@@ -329,6 +329,8 @@ trans2a:                                        ;liczba
         mov     cl, bl
         cmp     ch, 0
         jz      trans2l        ;                ;nic nie rob
+        cmp     dl, dh     
+        jge     prerr
         mov     al, dh
         add     al, dl 
         push    bx
@@ -404,16 +406,18 @@ trans4:
         
 trans4l:         
         cmp     bx, 64
-        jz      read2
+        jz      trans5
         mov     al, byte ptr es:[si+bx]
         inc     bx
         cmp     al, 128
-        jz      read2
+        jz      trans5
         cmp     al, -123       ;
-        jge     trans2a                         ;liczba
+        jge     trans4a                         ;liczba  ok
         cmp     al, 132
-        jz      trans2c        ;                ;znaleziono operator mnozenia 
-        jmp     trans2l
+        jz      trans4c        ;                ;znaleziono operator mnozenia ok
+        cmp     al, 129 
+        jz      trans4l        ;                 ok
+        jmp     trans4e
         
 trans4a:                                        ;liczba
         mov     dh, dl         ;
@@ -421,9 +425,11 @@ trans4a:                                        ;liczba
         mov     ch, cl         ;
         mov     cl, bl
         cmp     ch, 0
-        jz      trans2l        ;                ;nic nie rob
+        jz      trans4l
+        cmp     ah, 132
+        jnz     trans4l        ;                ;nic nie rob
         mov     al, dh
-        add     al, dl 
+        mul     dl 
         push    bx
         mov     bl, ch
         dec     bl
@@ -432,27 +438,158 @@ trans4a:                                        ;liczba
 trans4b:
         inc     bx
         cmp     bl, cl
-        jz      trans2d 
+        jz      trans4d 
         mov     byte ptr es:[si+bx], 129        
-        jmp     trans2b
+        jmp     trans4b
         
 trans4d:         
         pop     bx    
         mov     cl, ch
-        jmp     trans2l                         ;nic nie rob
+        mov     ah, 0
+        jmp     trans4l                         ;nic nie rob
 
 trans4c:
-        mov     ah, byte ptr es:[si+bx-2]
-        cmp     ah, 129
-        jnz     trans2l
-        mov     ah, byte ptr es:[si+bx]
-        cmp     ah, 129
-        jnz     trans2l
-        xor     dx, dx          ; 
+        mov     ah, 132
+        jmp     trans4l        ;    ;;;;
+    
+trans4e:               
+        mov     ah, 0
+        xor     dx, dx
         xor     cx, cx
-        jmp     trans2l        ;    ;;;;            
+        jmp     trans4l    
+        
+trans5:  
+        mov     ax, 0             
+        mov     bx, 0
+        mov     cx, 0
+        mov     cl, 1
+        mov     dx, 0
+        
+trans5l:         
+        cmp     bx, 64
+        jz      read2
+        mov     al, byte ptr es:[si+bx]
+        inc     bx
+        cmp     al, 128
+        jz      read2
+        cmp     al, -123       ;
+        jge     trans5a                         ;liczba           
+        cmp     al, 130
+        jz      trans5b        ;                ;znaleziono operator dodawania ok
+        cmp     al, 131
+        jz      trans5c        ;                ;znaleziono operator odejmowania ok
+        jmp     trans5l
+        
+trans5a:                                        ;liczba
+        mov     dh, dl         ;
+        mov     dl, al                ;;;;;;;;;;;;;;;;
+        mov     ch, cl         ;
+        mov     cl, bl
+        cmp     ch, 0
+        jz      trans5l        
+        mov     al, dh
+        cmp     ah, 130
+        jz      trans5d
+        cmp     ah, 131
+        jz      trans5e
+        cmp     ah, 0
+        jz      trans5l
+        
+trans5d:                                        ;dodawanie
+        add     al, dl        
+        jmp     trans5f
+        
+trans5e:                                        ;odejmowanie
+        sub     al, dl
+        jmp     trans5f
+        
+trans5f:
+        push    bx
+        mov     bl, ch
+        dec     bl
+        mov     byte ptr es:[si+bx], al
+        
+trans5g:
+        inc     bx
+        cmp     bl, cl
+        jz      trans5h 
+        mov     byte ptr es:[si+bx], 129        
+        jmp     trans5g
+        
+trans5h:         
+        pop     bx    
+        mov     cl, ch
+        mov     ah, 0
+        jmp     trans5l                         ;nic nie rob
+
+trans5b:                                        ;dodawanie
+        mov     ah, 130
+        jmp     trans5l        ;    ;;;;
+    
+trans5c:                                        ;odejmowanie
+        mov     ah, 131
+        jmp     trans5l           
                 
-read2:                                                
+read2:  
+        mov     ax, 0
+        mov     bx, 0
+        mov     cx, 0
+        mov     dx, 0
+        
+gres:
+        cmp     bx, 64
+        jz      egres
+        mov     dl, byte ptr es:[si+bx]
+        inc     bx
+        cmp     dl, 128
+        jz      egres
+        cmp     dl, 129
+        jnz     egres
+        jmp     gres
+
+egres:
+        mov	    ax, 0b800h                      ;ustawianie adresu bufora  
+	    mov	    es, ax                          ;tekstowego
+	    mov     si, 342                         
+	    mov     byte ptr es:[si], '+'              
+	    mov     byte ptr es:[si+2], '0'       
+	    mov     byte ptr es:[si+4], '0'       
+	    mov     byte ptr es:[si+6], '0'
+	    cmp     dl, -123
+	    jnge    read3
+	    cmp     dl, 0
+	    jnl     print1
+	    mov     byte ptr es:[si], '-'
+	    neg     dl
+	    
+print1:
+        cmp     dl, 100
+        jnge    print3                 
+	    mov     byte ptr es:[si+2], '1'
+	    sub     dl, 100
+	   
+print3: 
+        mov     ax, dx
+        mov     dl, 10
+        idiv    dl
+        add     al, 48
+        add     ah, 48
+        cmp     al, 48  
+	    mov     byte ptr es:[si+4], al
+	    mov     byte ptr es:[si+6], ah
+	    jmp     read3
+	    
+prerr:
+        mov	    ax, 0b800h                      ;ustawianie adresu bufora  
+	    mov	    es, ax                          ;tekstowego
+	    mov     si, 342                         
+	    mov     byte ptr es:[si], 'E'              
+	    mov     byte ptr es:[si+2], 'R'       
+	    mov     byte ptr es:[si+4], 'R'       
+	    mov     byte ptr es:[si+6], '!'
+             
+        
+read3:                                                
 	    mov	    ax, 0b800h                      ;ustawianie adresu bufora  
 	    mov	    es, ax                          ;tekstowego
              
