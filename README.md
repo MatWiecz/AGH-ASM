@@ -29,19 +29,27 @@ Source code from laboratories of assembler course.
 
     Some example expressions:
     
-    ![](./doc/1.png)
+    ![1.png](./doc/1.png)
+    
     Right long numbers parsing.
     
-    ![](./doc/2.png)
-    ![](./doc/3.png)
+    ![2.png](./doc/2.png)
+    
+    ![3.png](./doc/3.png)
+    
     Right simple expression parsing.
     
-    ![](./doc/4.png)
-    ![](./doc/5.png)
+    ![4.png](./doc/4.png)
+    
+    ![5.png](./doc/5.png)
+    
     Some errors in expression (not typed correctly or an operation not defined).
     
-    ![](./doc/6.png)
-    ![](./doc/7.png)
-    ![](./doc/8.png)
+    ![6.png](./doc/6.png)
+    
+    ![7.png](./doc/7.png)
+    
+    ![8.png](./doc/8.png)
+    
     Some errors in expression (not typed correctly or an operation not defined).
     
